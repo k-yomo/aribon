@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -12,31 +11,26 @@ import (
 func main() {
 	io, flush := NewIO()
 	defer flush()
-	l, n := io.ScanInt(), io.ScanInt()
-	ants := io.ScanInts(n)
-	sort.Ints(ants)
-	max := Max(l-ants[0], ants[n-1])
-	min := 0
-	for _, a := range ants {
-		if Min(a, l-a) > min {
-			min = Min(a, l-a)
-		}
+	n, k := io.ScanInt2()
+	nums := io.ScanInts(n)
+	if isSumEqualToK(0, 0, nums, k) {
+		fmt.Println("Yes")
+	} else {
+		fmt.Println("No")
 	}
-	fmt.Println(min, max)
 }
 
-func Min(a, b int) int {
-	if a < b {
-		return a
+func isSumEqualToK(i, sum int, nums []int, k int) bool {
+	if i == len(nums) {
+		return sum == k
 	}
-	return b
-}
-
-func Max(a, b int) int {
-	if a > b {
-		return a
+	if isSumEqualToK(i+1, sum, nums, k) {
+		return true
 	}
-	return b
+	if isSumEqualToK(i+1, sum+nums[i], nums, k) {
+		return true
+	}
+	return false
 }
 
 type IO struct {
@@ -103,6 +97,18 @@ func (io *IO) Scan2DGraph(y int) [][]string {
 
 func (io *IO) ScanInt() int {
 	return int(io.ScanInt64())
+}
+
+func (io *IO) ScanInt2() (int, int) {
+	return int(io.ScanInt64()), int(io.ScanInt64())
+}
+
+func (io *IO) ScanInt3() (int, int, int) {
+	return int(io.ScanInt64()), int(io.ScanInt64()), int(io.ScanInt64())
+}
+
+func (io *IO) ScanInt4() (int, int, int, int) {
+	return int(io.ScanInt64()), int(io.ScanInt64()), int(io.ScanInt64()), int(io.ScanInt64())
 }
 
 func (io *IO) ScanInts(n int) []int {
